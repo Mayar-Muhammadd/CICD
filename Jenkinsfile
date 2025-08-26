@@ -1,14 +1,22 @@
-node {
-    stage('Checkout') {
-        git branch: 'newbranch', url: 'https://github.com/Mayar-Muhammadd/CICD'
-    }
+@Library('my-shared-lib') _   
 
-    stage('Build') {
-        sh 'mvn clean install'
-    }
+pipeline {
+    agent any
 
-    stage('Test') {
-        sh 'mvn test'
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building..."
+            }
+        }
+
+        stage('Use Shared Library') {
+            steps {
+                script {
+                    def numbers = bounds(1, 5)   // calling your function from vars/bounds.groovy
+                    echo "Generated numbers: ${numbers}"
+                }
+            }
+        }
     }
 }
-
