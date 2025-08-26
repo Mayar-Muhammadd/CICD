@@ -1,6 +1,6 @@
 node {
     stage('Checkout') {
-        git 'https://github.com/Mayar-Muhammadd/CICD'
+        git branch: 'newbranch', url: 'https://github.com/Mayar-Muhammadd/CICD'
     }
 
     stage('Build') {
