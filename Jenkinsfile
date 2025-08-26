@@ -1,49 +1,22 @@
-pipeline {
-    agent any
-
-    tools {
-        maven 'Maven3'   // You must install Maven in Jenkins and name it "Maven3"
-        jdk 'Java17'     // You must install JDK in Jenkins and name it "Java17"
+node {
+    stage('Checkout') {
+        git branch: 'main', url: 'https://github.com/Mayar-Muhammadd/CICD'
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'mvn clean compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                sh 'mvn package'
-            }
-        }
-
-        stage('Archive') {
-            steps {
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            }
+    stage('Build') {
+        // Use Maven to build
+        withMaven(maven: 'Maven3', jdk: 'Java17') {
+            sh 'mvn clean install'
         }
     }
 
-    post {
-        success {
-            echo 'Build and tests completed successfully!'
+    stage('Test') {
+        withMaven(maven: 'Maven3', jdk: 'Java17') {
+            sh 'mvn test'
         }
-        failure {
-            echo 'Build failed. Please check the logs.'
-        }
+    }
+
+    stage('Deploy') {
+        echo "Deploy stage (can be extended later)"
     }
 }
