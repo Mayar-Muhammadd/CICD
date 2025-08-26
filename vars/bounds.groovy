@@ -1,1 +1,1 @@
-def call() { echo 'hello from bounds' }
+def call(int x) { return x * 2 }
